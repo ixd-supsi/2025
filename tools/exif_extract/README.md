@@ -1,7 +1,7 @@
 # Estrazione metadati da immagini
 
 
-Aprire il terminale nella cartella ```exifr_extract```
+Aprire il terminale nella cartella ```exif_extract```
 
 ### Prima esecuzione 
 ```
