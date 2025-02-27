@@ -1,7 +1,7 @@
 import fs from 'fs'
 import os from 'os'
 
-export const IMAGE_PATH_LOCATION = "./image_path.cfg"
+export const DEFAULT_CFG_PATH_LOCATION = "./image_path.cfg"
 const FILES_DA_IGNORARE = ['.DS_Store', '.AppleDouble', '.LSOverride']
 
 export function getImagePath() {
