@@ -15,16 +15,10 @@ const JSON_PATH = path.join(IMG_PATH, "..", "data_exif.json") // Nome del file p
 run()
 
 async function run() {
-
 	const files = scanFolder(IMG_PATH)
 
-	// immagine singola per avere un esempio della struttura dei metadati
-	exifr.parse(path.join(IMG_PATH, files[0])).then(output => {
-		console.log(output)
-	})
-
 	const data = []
-
+	
 	// Inizio cronometro...
 	const t0 = (new Date()).getTime()
 
