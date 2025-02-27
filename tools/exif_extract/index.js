@@ -10,7 +10,7 @@ const FILTRO = undefined
 
 const IMG_PATH  = getImagePath()    // percorso delle cartella delle immagini (relativo a questo script)
 
-const JSON_PATH = path.join(IMG_PATH, "..", "data_exif.json") // Nome del file per il salvataggio dei dati
+const JSON_PATH = path.join(IMG_PATH, ".", "data_exif.json") // Nome del file per il salvataggio dei dati
 
 run()
 
