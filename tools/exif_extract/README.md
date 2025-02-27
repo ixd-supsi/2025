@@ -7,7 +7,7 @@ Aprire il terminale nella cartella ```exifr_extract```
 ```
 npm install
 ```
-Assicurarsi che il file ```common/image_path.cfg``` contenga il percorso **assoluto** alla cartella delle immagini da analizzare
+Assicurarsi che il file ```image_path.cfg``` contenga il percorso **assoluto** alla cartella delle immagini da analizzare
 
 
 ### Esecuzione script 
