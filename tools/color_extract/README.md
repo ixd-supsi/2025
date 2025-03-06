@@ -1,4 +1,4 @@
-# Ridimensionare immagini (batch)
+# Estrarre i colori delle immagini
 
 Aprire il terminale nella cartella ```resize```  
 
