@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Esempio 02: js</title>
+</head>
+<body>
+	<pre></pre>
+</body>
+<script>
+
+	const lat = 45.87
+	const long = 8.98
+	const openMetoAPI = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + long + "&hourly=temperature_2m&timezone=auto&forecast_days=1"
+
+	console.log(openMetoAPI)
+
+	fetch(openMetoAPI)
+	.then( r => r.json())
+	.then( j => {
+		const d = new Date()
+		const h = d.getHours()
+		const temp = j.hourly.temperature_2m[h]
+		const ora = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+		document.querySelector('pre').innerHTML = "Sono le " + ora + " e al campus SUPSI di Mendrisio ci sono " + temp + "°C."
+	})
+
+</script>
+</html>
