@@ -1,0 +1,21 @@
+a {
+	color: royalblue;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:visited{
+	color:gray;
+}
+.link-esterni {
+	color: pink;
+	transition: all 500ms;
+}
+.link-esterni:visited{
+	color: pink;
+}
+.link-esterni:hover{
+	padding: 10px;
+}
+
