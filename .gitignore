@@ -5,6 +5,7 @@
 
 # Node.js
 node_modules/
+package_lock.json
 
 # Icon must end with two \r
 Icon
@@ -37,6 +38,8 @@ settings.json
 !.vscode/extensions.json
 *.code-workspace
 .history/
-scripts/YOLO_detect/data_yolo.json
-scripts/face_detect/data_faces.json
-scripts/exif_extract/data_exif.js
+
+data_yolo.json
+data_faces.json
+data_exif.json
+data_colors.json
