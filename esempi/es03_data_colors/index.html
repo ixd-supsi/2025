@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Esempio 03: Colors</title>
+</head>
+<body>
+
+	<!--
+	 <div>
+		IMG_3646.jpg
+		<div style="height:20px; background-color:#336699"></div>
+		<div style="height:20px; background-color:#ff8352"></div>
+		<div style="height:20px; background-color:#cc2497"></div>
+	</div>
+
+	<div>
+		IMG_3646.jpg
+		<div style="height:20px; background-color:#446699"></div>
+		<div style="height:20px; background-color:#ff9952"></div>
+		<div style="height:20px; background-color:#cc2444"></div>
+	</div>
+
+	<div>
+		IMG_3646.jpg
+		<div style="height:20px; background-color:#996699"></div>
+		<div style="height:20px; background-color:#ff8833"></div>
+		<div style="height:20px; background-color:#cc2400"></div>
+	</div>
+	-->
+	<script type="module">
+
+		const colori = await fetch("data_colors_10.json").then( r => r.json() )
+
+		// const contenitore = document.createElement('div')
+		// contenitore.innerHTML = "IMG_3646.jpg"
+
+		// const col = document.createElement('div')
+		// col.style.height = "20px"
+		// col.style.backgroundColor = "#FF0000"
+
+		// contenitore.appendChild(col)
+
+		// document.body.appendChild(contenitore)
+
+		colori.forEach( file => {
+
+			const contenitore = document.createElement('div')
+			contenitore.innerHTML = file.FileName + "." + file.FileExtension
+
+			file.Colors.forEach( c => {
+				const col = document.createElement('div')
+				col.style.height = "20px"
+				col.style.backgroundColor = c
+				contenitore.appendChild(col)
+			})
+
+
+			document.body.appendChild(contenitore)
+
+		})
+
+	</script>
+</body>
+</html>
