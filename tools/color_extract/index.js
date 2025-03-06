@@ -7,7 +7,7 @@ const IMG_PATH   = getImagePath() // percorso delle cartella delle immagini (rel
 const JSON_PATH  = path.join("..", "data_colors.json") // Nome del file per il salvataggio dei dati
 
 // numero di colori da estrarre
-const NUM_COLORS = 1
+const NUM_COLORS = 3
 
 run()
 
@@ -37,7 +37,7 @@ async function run() {
 
 		data.push({
 			FileName      : path.parse(file).name,
-			FileExtension : ".jpg",
+			FileExtension : path.extname(file),
 			Colors
 		})
 	}
