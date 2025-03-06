@@ -3,14 +3,13 @@ import fs from 'fs'
 import path from 'path'
 import { scanFolder, getImagePath } from './common.js'
 
+const IMG_PATH  = getImagePath()    // percorso delle cartella delle immagini (relativo a questo script)
+const JSON_PATH = path.join("..", "data_exif.json") // Nome del file per il salvataggio dei dati
+
 // È possibile selezionare solo i campi desiderati:
 // const FILTRO = ['ISO', 'Orientation', 'LensModel']
 // ...oppure inserirli tutti:
 const FILTRO = undefined
-
-const IMG_PATH  = getImagePath()    // percorso delle cartella delle immagini (relativo a questo script)
-
-const JSON_PATH = path.join(IMG_PATH, ".", "data_exif.json") // Nome del file per il salvataggio dei dati
 
 run()
 
@@ -18,7 +17,7 @@ async function run() {
 	const files = scanFolder(IMG_PATH)
 
 	const data = []
-	
+
 	// Inizio cronometro...
 	const t0 = (new Date()).getTime()
 
@@ -29,8 +28,8 @@ async function run() {
 			data.push({
 				// ImageWidth : output.ExifImageWidth,
 				// ImageHeight : output.ExifImageHeight,
-				FileExtension : path.extname(file),
 				FileName : path.parse(file).name,
+				FileExtension : path.extname(file),
 				EXIF : output
 			})
 		}).catch( e => console.log("Errore: " + file))
