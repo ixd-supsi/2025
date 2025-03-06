@@ -20,10 +20,9 @@ Verrà creato un file ```data_images.json```
 ```
 [
     {
-        "ImageWidth": 384,
-        "ImageHeight": 512,
         "FileExtension": ".jpg",
         "FileName": "_AWJF1281",
+		"Colors : [#FF3278]
     },
     ...ecc
 ]
