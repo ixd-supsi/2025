@@ -1,6 +1,6 @@
-# Estrarre i colori delle immagini
+# Estrazione di colori delle immagini
 
-Aprire il terminale nella cartella ```resize```  
+Aprire il terminale nella cartella ```color_extract```  
 
 
 ### Prima esecuzione
@@ -14,7 +14,7 @@ Assicurarsi che il file ```image_path.cfg``` contenga il percorso **assoluto** a
 ```
 node index.js
 ```
-Verrà creato un file ```data_images.json```
+Verrà creato un file ```data_colors.json```
 
 ### Risultato ottenuto
 ```
