@@ -45,7 +45,6 @@
 		// document.body.appendChild(contenitore)
 
 		colori.forEach( file => {
-
 			const contenitore = document.createElement('div')
 			contenitore.innerHTML = file.FileName + "." + file.FileExtension
 
@@ -55,10 +54,7 @@
 				col.style.backgroundColor = c
 				contenitore.appendChild(col)
 			})
-
-
 			document.body.appendChild(contenitore)
-
 		})
 
 	</script>
