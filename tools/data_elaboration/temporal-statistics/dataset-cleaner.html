@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiche immagini</title>
+</head>
+<body>
+
+    <div id="box">
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        const path_to_json = "dati/data_exif.json"
+
+        const dates = {};
+        const days = {}; 
+        const hours = {}; 
+        const days_week = {};
+
+        output_container = document.getElementById('output')
+        let output = ''
+
+        fetch(path_to_json)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+
+                // output_container.innerHTML += '<h1>statistiche basate su data</h1>'
+
+                id_count = 0
+
+                output_container.innerHTML += 'id,date,iso,orientation<br/>'
+
+                for (const item of data) {
+                    id_count += 1
+                    
+                    const date = item.EXIF.CreateDate 
+                    const the_date = new Date(date)
+                    const iso = item.EXIF.ISO
+                    const orientation = item.EXIF.Orientation
+
+                    output_container.innerHTML += date + ',' + iso + ',' + orientation + '<br/>'
+                    // console.log(date)
+
+                    const hour = the_date.getHours();
+                    const minute = the_date.getMinutes();
+                    const day = the_date.getDate();
+                    const day_of_week = the_date.getDay();
+                    // console.log(hour, minute)
+                
+                    // conta giorni del mese
+                    if (days[day]) {
+                        days[day]++;
+                    } else {
+                        days[day] = 1;
+                    }
+
+                    // conta giorni della settimana
+                    if (days_week[day_of_week]) {
+                        days_week[day_of_week]++;
+                    } else {
+                        days_week[day_of_week] = 1;
+                    }
+                    
+
+                    // ore del giorno
+                    if (hours[hour]) {
+                        hours[hour]++;
+                    } else {
+                        hours[hour] = 1;
+                    }
+                }
+
+                console.log(days_week)
+
+                // output_container.innerHTML +=  '(domenica = 0, lunedì = 1, ...)<br/>'
+                // output_container.innerHTML += 'giorno della settimana,foto<br/>'
+                for (const key in days_week){
+                    const values = days_week[key]
+                    // output_container.innerHTML += key + "," + values + '<br/>'
+                }
+                // output_container.innerHTML += '<br/>'
+
+                // output_container.innerHTML += 'giorno del mese,foto<br/>'
+                for (const key in days){
+                    const values = days[key]
+                    // output_container.innerHTML += key + "," + values + '<br/>'
+                }
+                // output_container.innerHTML += '<br/>'
+
+                // output_container.innerHTML += 'ore del giorno,foto<br/>'
+                for (const key in hours){
+                    const values = hours[key]
+                    // output_container.innerHTML += key + "," + values + '<br/>'
+                }
+
+            })
+
+    </script>
+</body>
+</html>

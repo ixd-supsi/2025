@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiche immagini</title>
+</head>
+<body>
+
+    <div id="box">
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        const path_to_json = "dati/data_exif.json"
+        const output_container = document.getElementById('output')
+
+        let output = ''
+
+        fetch(path_to_json)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+
+                id_count = 0
+
+                output += 'id,date,iso,orientation<br/>'
+
+                for (const item of data) {
+                    id_count += 1
+                    
+                    const date = item.EXIF.CreateDate 
+                    const the_date = new Date(date)
+                    const iso = item.EXIF.ISO
+                    const orientation = item.EXIF.Orientation
+
+                    output += date + ',' + iso + ',' + orientation + '<br/>'
+                    
+                }
+
+                output_container.innerHTML = output
+                console.log(output)
+
+            })
+
+    </script>
+</body>
+</html>
