@@ -13,13 +13,13 @@
 
     <script>
         const path_to_json = "dati/data_exif.json"
+        const output_container = document.getElementById('output')
 
-        const dates = {};
         const days = {}; 
         const hours = {}; 
         const days_week = {};
+        const months = {};
 
-        output_container = document.getElementById('output')
         let output = ''
 
         fetch(path_to_json)
@@ -27,74 +27,82 @@
             .then(data => {
                 console.log(data)
 
-                // output_container.innerHTML += '<h1>statistiche basate su data</h1>'
+                output += '<h1>Statistiche basate su data e orario</h1>'
 
                 id_count = 0
 
-                output_container.innerHTML += 'id,date,iso,orientation<br/>'
-
                 for (const item of data) {
-                    id_count += 1
-                    
+
                     const date = item.EXIF.CreateDate 
                     const the_date = new Date(date)
-                    const iso = item.EXIF.ISO
-                    const orientation = item.EXIF.Orientation
-
-                    output_container.innerHTML += date + ',' + iso + ',' + orientation + '<br/>'
-                    // console.log(date)
 
                     const hour = the_date.getHours();
                     const minute = the_date.getMinutes();
                     const day = the_date.getDate();
                     const day_of_week = the_date.getDay();
+                    const month = the_date.getMonth() + 1;
                     // console.log(hour, minute)
                 
-                    // conta giorni del mese
+                    // giorni del mese
                     if (days[day]) {
                         days[day]++;
                     } else {
                         days[day] = 1;
                     }
 
-                    // conta giorni della settimana
+                    // giorni della settimana
                     if (days_week[day_of_week]) {
                         days_week[day_of_week]++;
                     } else {
                         days_week[day_of_week] = 1;
                     }
                     
-
                     // ore del giorno
                     if (hours[hour]) {
                         hours[hour]++;
                     } else {
                         hours[hour] = 1;
                     }
+
+                    // mesi dell'anno
+                    if (months[month]) {
+                        months[month]++;
+                    } else {
+                        months[month] = 1;
+                    }
                 }
 
                 console.log(days_week)
 
-                // output_container.innerHTML +=  '(domenica = 0, lunedì = 1, ...)<br/>'
-                // output_container.innerHTML += 'giorno della settimana,foto<br/>'
+                output +=  '(domenica = 0, lunedì = 1, ...)<br/>'
+                output += 'giorno della settimana,foto<br/>'
                 for (const key in days_week){
-                    const values = days_week[key]
-                    // output_container.innerHTML += key + "," + values + '<br/>'
+                    const value = days_week[key]
+                    output += key + "," + value + '<br/>'
                 }
-                // output_container.innerHTML += '<br/>'
+                output += '<br/>'
 
-                // output_container.innerHTML += 'giorno del mese,foto<br/>'
+                output += 'giorno del mese,foto<br/>'
                 for (const key in days){
-                    const values = days[key]
-                    // output_container.innerHTML += key + "," + values + '<br/>'
+                    const value = days[key]
+                    output += key + "," + value + '<br/>'
                 }
-                // output_container.innerHTML += '<br/>'
+                output += '<br/>'
 
-                // output_container.innerHTML += 'ore del giorno,foto<br/>'
+                output += 'ore del giorno,foto<br/>'
                 for (const key in hours){
-                    const values = hours[key]
-                    // output_container.innerHTML += key + "," + values + '<br/>'
+                    const value = hours[key]
+                    output += key + "," + value + '<br/>'
                 }
+                output += '<br/>'
+
+                output += 'mesi,foto<br/>'
+                for (const key in months){
+                    const value = months[key]
+                    output += key + "," + value + '<br/>'
+                }
+
+                output_container.innerHTML = output
 
             })
 
