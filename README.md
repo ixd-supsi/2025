@@ -7,7 +7,7 @@ Esempi di codice e documenti per il semestre primaverile CV2, SUPSI
 - [Eloquent JavaScript](https://eloquentjavascript.net)¹, Marijn Haverbeke
 - [The Nature Of Code](https://natureofcode.com/random/)¹, Daniel Shiffmann
 - [The Coding Train](https://thecodingtrain.com)², Daniel Shiffmann
-- [Learn p5js](https://p5js.org/learn/)
+- [Learn p5js](https://p5js.org/tutorials/)
 
 ¹ È possibile comandare la versione cartacea<br/>
 ² Lezioni video
