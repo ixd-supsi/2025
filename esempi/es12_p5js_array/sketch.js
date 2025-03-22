@@ -10,15 +10,16 @@ function setup() {
 }
 
 function draw() {
-	const distanza = mouseY * 0.03
+	const distanza = 2
 	background(0)
-	rotateY(mouseX * 0.01)
+	scale (1.4)
+	rotateY(frameCount % 800 / 800 * TAU)
 	translate(0, 0, immagini.length / 2 * distanza)
 	imageMode(CENTER)
 	for (let i=0; i<immagini.length; i++) {
 		push()
 		translate(0, 0, -i * distanza)
-		image(immagini[(i + frameCount) % immagini.length], 0, 0)
+		image(immagini[(i + frameCount - 75 + immagini.length) % immagini.length], 0, 0)
 		pop()
 	}
 }
