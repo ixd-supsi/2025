@@ -3,6 +3,10 @@
 .AppleDouble
 .LSOverride
 
+# Python
+venv/*
+*.pt
+
 # Node.js
 node_modules/
 package-lock.json
