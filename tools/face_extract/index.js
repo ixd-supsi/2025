@@ -122,17 +122,17 @@ function getFormattedData(face, image_width, image_height) {
 	const expressions = Object.entries(face.expressions).reduce((acc, val) => ((val[1] > acc[1]) ? val : acc), ['', 0])
 
 	const box =  {
-		x      : Math.max(0, Math.floor(face.alignedRect._box._x)), // correzione arrotondamenti
-		y      : Math.max(0, Math.floor(face.alignedRect._box._y)), //
+		left   : Math.max(0, Math.floor(face.alignedRect._box._x)), // correzione arrotondamenti
+		top    : Math.max(0, Math.floor(face.alignedRect._box._y)), //
 		width  : Math.floor(face.alignedRect._box._width),
 		height : Math.floor(face.alignedRect._box._height),
 	}
 
 	// Fix per arrotondamenti misure (~ +/- 3px oltre i bordo)
-	const dx = (box.x + box.width) - image_width
+	const dx = (box.left + box.width) - image_width
 	if (dx > 0) box.width -= dx
 
-	const dy =  (box.y + box.height) - image_height
+	const dy =  (box.top + box.height) - image_height
 	if (dy > 0) box.height -= dy
 
 	return {
