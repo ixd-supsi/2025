@@ -13,7 +13,7 @@ const CROP_PATH      = path.join("..", "face_crops")
 const JSON_PATH      = path.join("..", "data_faces.json") // Nome del file per il salvataggio dei dati
 const CROP_SIZE      = null              // ridimensiona crop (lasciare "null" per dimensione originale)
 
-const MIN_CONFIDENCE_THRESHOLD = 0.15
+const MIN_CONFIDENCE_THRESHOLD = 0.15 // confidenza [0..1]
 const MAX_RESULTS    = 50
 
 run()
