@@ -40,7 +40,7 @@ Il programma:
 - Processa tutte le immagini nella directory specificata
 - Rileva i volti in ogni immagine usando Face-API
 - Analizza età, genere ed espressioni dei volti rilevati
-- Salva i risultati del rilevamento in `data_faces.json` nella directory padre dello script
+- Salva i risultati del rilevamento in `data_faces.json` nella cartella precedente dello script
 - Se il ritaglio è abilitato (-c), salva le immagini dei volti individuali in una cartella `face_crops`
 
 ### Formato Output
