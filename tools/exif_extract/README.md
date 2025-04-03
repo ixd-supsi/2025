@@ -32,7 +32,7 @@ Questo programma analizza le immagini per estrarre i metadati EXIF e salva i ris
 Il programma:
 - Processa tutte le immagini nella directory specificata
 - Estrae i metadati EXIF da ogni immagine
-- Salva i risultati in `data_exif.json` nella directory padre dello script
+- Salva i risultati in `data_exif.json` nella cartella precedente dello script
 
 ### Formato Output
 
@@ -40,29 +40,29 @@ L'output JSON è un array di oggetti, dove ogni oggetto rappresenta un'immagine 
 
 ```json
 [
-    {
-        "FileName": "DSC_1234",
-        "FileExtension": ".jpg",
-        "ImageWidth": 6000,
-        "ImageHeight": 4000,
-        "EXIF": {
-            "ISO": 400,
-            "FNumber": 4.0,
-            "ExposureTime": "1/250",
-            "DateTimeOriginal": "2024-03-01T10:15:30.000Z",
-            "Make": "SONY",
-            "Model": "ILCE-7M4",
-            "LensModel": "FE 24-70mm F2.8 GM",
-            "FocalLength": 50,
-            "Flash": "Flash did not fire",
-            "WhiteBalance": "Daylight",
-            "MeteringMode": "Multi-segment",
-            "ExposureMode": "Manual",
-            "GPSLatitude": 46.234567,
-            "GPSLongitude": 9.123456,
-            "GPSAltitude": 1200.0
-        }
-    }
+	{
+		"FileName": "DSC_1234",
+		"FileExtension": ".jpg",
+		"ImageWidth": 6000,
+		"ImageHeight": 4000,
+		"EXIF": {
+			"ISO": 400,
+			"FNumber": 4.0,
+			"ExposureTime": "1/250",
+			"DateTimeOriginal": "2024-03-01T10:15:30.000Z",
+			"Make": "SONY",
+			"Model": "ILCE-7M4",
+			"LensModel": "FE 24-70mm F2.8 GM",
+			"FocalLength": 50,
+			"Flash": "Flash did not fire",
+			"WhiteBalance": "Daylight",
+			"MeteringMode": "Multi-segment",
+			"ExposureMode": "Manual",
+			"GPSLatitude": 46.234567,
+			"GPSLongitude": 9.123456,
+			"GPSAltitude": 1200.0
+		}
+	}
 ]
 ```
 
