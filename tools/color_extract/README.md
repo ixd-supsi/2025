@@ -32,7 +32,7 @@ Questo programma analizza le immagini per estrarre i colori dominanti e salva i 
 Il programma:
 - Processa tutte le immagini nella directory specificata
 - Estrae i colori dominanti da ogni immagine
-- Salva i risultati in `data_colors.json` nella directory padre dello script
+- Salva i risultati in `data_colors.json` nella cartella precedente dello script
 
 ### Formato Output
 
@@ -40,11 +40,11 @@ L'output JSON è un array di oggetti, dove ogni oggetto rappresenta un'immagine 
 
 ```json
 [
-    {
-        "FileName": "nome_immagine",
-        "FileExtension": ".jpg",
-        "Colors": ["#FF3278", "#00AABB", "#112233"]
-    }
+	{
+		"FileName": "nome_immagine",
+		"FileExtension": ".jpg",
+		"Colors": ["#FF3278", "#00AABB", "#112233"]
+	}
 ]
 ```
 
