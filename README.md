@@ -1,4 +1,4 @@
-# 2025 - Interazione Uomo-Macchina
+# IXD
 Esempi di codice e documenti per il corso di Design dell’Interazione, semestre primaverile CV2, SUPSI.
 
 Questa repository contiene materiale didattico ed esempi pratici per l’apprendimento della programmazione interattiva, con particolare focus su JavaScript, HTML e l’ambiente del browser.
