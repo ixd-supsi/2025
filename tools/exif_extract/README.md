@@ -43,8 +43,6 @@ L'output JSON è un array di oggetti, dove ogni oggetto rappresenta un'immagine 
 	{
 		"FileName": "DSC_1234",
 		"FileExtension": ".jpg",
-		"ImageWidth": 6000,
-		"ImageHeight": 4000,
 		"EXIF": {
 			"ISO": 400,
 			"FNumber": 4.0,
@@ -69,8 +67,6 @@ L'output JSON è un array di oggetti, dove ogni oggetto rappresenta un'immagine 
 Dove:
 - `FileName`: Nome del file immagine (senza estensione)
 - `FileExtension`: Estensione del file immagine (es. .jpg, .png)
-- `ImageWidth`: Larghezza dell'immagine in pixel
-- `ImageHeight`: Altezza dell'immagine in pixel
 - `EXIF`: Oggetto contenente i metadati EXIF dell'immagine, che possono includere:
   - `ISO`: Sensibilità ISO
   - `FNumber`: Apertura del diaframma
