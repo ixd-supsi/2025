@@ -38,7 +38,7 @@ Questo programma utilizza YOLOv8 per rilevare oggetti nelle immagini e salva i r
 Il programma:
 - Processa tutte le immagini nella directory specificata
 - Rileva gli oggetti in ogni immagine usando YOLOv8
-- Salva i risultati del rilevamento in `data_yolo.json` nella directory padre dello script
+- Salva i risultati del rilevamento in `data_yolo.json` nella cartella precedente dello script
 - Se il ritaglio è abilitato (-c), salva le immagini degli oggetti individuali in una cartella `yolo_crops`
 
 ### Formato Output
