@@ -13,7 +13,7 @@ Questo programma utilizza Face-API per rilevare volti nelle immagini, analizzare
 1. Aprire il terminale nella cartella del progetto
 2. Installare i pacchetti necessari:
 	```bash
-	npm install
+	npm --force install
 	```
 3. Configurare il percorso delle immagini:
 	- Creare un file `image_path.cfg` nella directory precedente
