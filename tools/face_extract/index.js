@@ -78,7 +78,14 @@ async function run() {
 			let idx = 0
 			for (const o of Faces) {
 				const output_path = path.join(CROP_PATH, FileName + "_" + idx++ + ".jpg")
-				cropAndSaveSharpImage(sharp_img.image, o.box, output_path, CROP_SIZE)
+				// Convert outputBox back to sharpBox format for cropping
+				const sharpBox = {
+					left: o.box.x,
+					top: o.box.y,
+					width: o.box.width,
+					height: o.box.height
+				}
+				cropAndSaveSharpImage(sharp_img.image, sharpBox, output_path, CROP_SIZE)
 			}
 		}
 
@@ -121,22 +128,31 @@ function getTensor(buffer) {
 function getFormattedData(face, image_width, image_height) {
 	const expressions = Object.entries(face.expressions).reduce((acc, val) => ((val[1] > acc[1]) ? val : acc), ['', 0])
 
-	const box =  {
-		left   : Math.max(0, Math.floor(face.alignedRect._box._x)), // correzione arrotondamenti
-		top    : Math.max(0, Math.floor(face.alignedRect._box._y)), //
+	// Internal box format for sharp compatibility
+	const sharpBox = {
+		left   : Math.max(0, Math.floor(face.alignedRect._box._x)),
+		top    : Math.max(0, Math.floor(face.alignedRect._box._y)),
 		width  : Math.floor(face.alignedRect._box._width),
 		height : Math.floor(face.alignedRect._box._height),
 	}
 
 	// Fix per arrotondamenti misure (~ +/- 3px oltre i bordo)
-	const dx = (box.left + box.width) - image_width
-	if (dx > 0) box.width -= dx
+	const dx = (sharpBox.left + sharpBox.width) - image_width
+	if (dx > 0) sharpBox.width -= dx
 
-	const dy =  (box.top + box.height) - image_height
-	if (dy > 0) box.height -= dy
+	const dy =  (sharpBox.top + sharpBox.height) - image_height
+	if (dy > 0) sharpBox.height -= dy
+
+	// Output box format with x and y
+	const outputBox = {
+		x      : sharpBox.left,
+		y      : sharpBox.top,
+		width  : sharpBox.width,
+		height : sharpBox.height,
+	}
 
 	return {
-		box,
+		box: outputBox,
 		confidence : Math.round(face.detection._score * 1000) / 10,
 		gender : face.gender,
 		genderConfidence : Math.round(face.genderProbability * 1000) / 10,
