@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Esempio 02: js</title>
+	<title>Esempio 02: JavaScript e API Meteo</title>
 </head>
 <body>
 	<pre></pre>
 	<script>
-
+		// Coordinate del campus SUPSI di Mendrisio
 		const lat = 45.87
 		const long = 8.98
+		// Costruisce l'URL per l'API meteo
 		const openMetoAPI = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + long + "&hourly=temperature_2m&timezone=auto&forecast_days=1"
 
 		console.log(openMetoAPI)
 
+		// Richiede i dati meteo e li visualizza
 		fetch(openMetoAPI)
 		.then( r => r.json())
 		.then( j => {
