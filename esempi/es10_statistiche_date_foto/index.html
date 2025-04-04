@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistiche immagini</title>
+    <title>Esempio 10: Statistiche date foto</title>
 </head>
 <body>
 
@@ -15,97 +15,67 @@
         const path_to_json = "dati/data_exif.json"
         const output_container = document.getElementById('output')
 
-        const days = {}; 
-        const hours = {}; 
-        const days_week = {};
-        const months = {};
+        // Oggetti per memorizzare le statistiche
+        const days = {}; // Foto per giorno del mese
+        const hours = {}; // Foto per ora del giorno
+        const days_week = {}; // Foto per giorno della settimana
+        const months = {}; // Foto per mese
 
         let output = ''
 
+        // Carica e analizza i dati EXIF
         fetch(path_to_json)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-
                 output += '<h1>Statistiche basate su data e orario</h1>'
 
-                id_count = 0
-
+                // Processa ogni immagine
                 for (const item of data) {
-
-                    const date = item.EXIF.CreateDate 
+                    const date = item.EXIF.CreateDate
                     const the_date = new Date(date)
 
+                    // Estrai componenti della data
                     const hour = the_date.getHours();
                     const minute = the_date.getMinutes();
                     const day = the_date.getDate();
                     const day_of_week = the_date.getDay();
                     const month = the_date.getMonth() + 1;
-                    // console.log(hour, minute)
-                
-                    // giorni del mese
-                    if (days[day]) {
-                        days[day]++;
-                    } else {
-                        days[day] = 1;
-                    }
 
-                    // giorni della settimana
-                    if (days_week[day_of_week]) {
-                        days_week[day_of_week]++;
-                    } else {
-                        days_week[day_of_week] = 1;
-                    }
-                    
-                    // ore del giorno
-                    if (hours[hour]) {
-                        hours[hour]++;
-                    } else {
-                        hours[hour] = 1;
-                    }
-
-                    // mesi dell'anno
-                    if (months[month]) {
-                        months[month]++;
-                    } else {
-                        months[month] = 1;
-                    }
+                    // Aggiorna contatori
+                    days[day] = (days[day] || 0) + 1;
+                    days_week[day_of_week] = (days_week[day_of_week] || 0) + 1;
+                    hours[hour] = (hours[hour] || 0) + 1;
+                    months[month] = (months[month] || 0) + 1;
                 }
 
-                console.log(days_week)
-
+                // Genera output in formato CSV
                 output +=  '(domenica = 0, lunedì = 1, ...)<br/>'
                 output += 'giorno della settimana,foto<br/>'
                 for (const key in days_week){
-                    const value = days_week[key]
-                    output += key + "," + value + '<br/>'
+                    output += key + "," + days_week[key] + '<br/>'
                 }
                 output += '<br/>'
 
                 output += 'giorno del mese,foto<br/>'
                 for (const key in days){
-                    const value = days[key]
-                    output += key + "," + value + '<br/>'
+                    output += key + "," + days[key] + '<br/>'
                 }
                 output += '<br/>'
 
                 output += 'ore del giorno,foto<br/>'
                 for (const key in hours){
-                    const value = hours[key]
-                    output += key + "," + value + '<br/>'
+                    output += key + "," + hours[key] + '<br/>'
                 }
                 output += '<br/>'
 
                 output += 'mesi,foto<br/>'
                 for (const key in months){
-                    const value = months[key]
-                    output += key + "," + value + '<br/>'
+                    output += key + "," + months[key] + '<br/>'
                 }
 
                 output_container.innerHTML = output
-
             })
-
     </script>
 </body>
 </html>
