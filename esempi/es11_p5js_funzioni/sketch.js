@@ -2,24 +2,24 @@ function setup() {
 	createCanvas(400, 400)
 }
 
-
 function draw() {
 	background(200)
 	noFill()
 	stroke(0,0,0)
+
+	// Disegna 100 poligoni concentrici con rotazione animata
 	for (let i=0; i<100; i++) {
+		// mouseX controlla il numero di lati, sin() crea l'animazione
 		poligono(width/2, height/2, 30 + i * 15, floor(mouseX / 50) + 3, sin(frameCount * 0.05 - i * 0.1) * 2)
 	}
 }
 
-
+// Funzione per disegnare un poligono regolare
 function poligono(x, y, r, numeroDiAngoli, rotazione) {
-
 	beginShape()
 
+	// Calcola i vertici del poligono
 	for (let i=0; i<numeroDiAngoli; i++) {
-		//ellipse(x + r * cos(TWO_PI / numeroDiAngoli * i), y + r * sin(TWO_PI / numeroDiAngoli * i), 5, 5)
-
 		const angolo = TWO_PI / numeroDiAngoli * i
 		const vx = x + r * cos(angolo + rotazione)
 		const vy = y + r * sin(angolo + rotazione)
@@ -44,5 +44,4 @@ function poligono(x, y, r, numeroDiAngoli, rotazione) {
 	// vertex(x + 20, y + 70)
 	// vertex(x + 30, y + 50)
 	// endShape(CLOSE)
-
 }
