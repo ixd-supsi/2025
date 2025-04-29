@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Esempio 03: Colors</title>
+	<title>Esempio 03: Estrazione e Visualizzazione Colori da Immagini</title>
 </head>
 <body>
 
@@ -30,24 +30,16 @@
 	</div>
 	-->
 	<script type="module">
-
+		// Carica i dati dei colori dal file JSON
 		const colori = await fetch("data_colors_10.json").then( r => r.json() )
 
-		// const contenitore = document.createElement('div')
-		// contenitore.innerHTML = "IMG_3646.jpg"
-
-		// const col = document.createElement('div')
-		// col.style.height = "20px"
-		// col.style.backgroundColor = "#FF0000"
-
-		// contenitore.appendChild(col)
-
-		// document.body.appendChild(contenitore)
-
+		// Per ogni immagine nel dataset
 		colori.forEach( file => {
+			// Crea un contenitore per l'immagine
 			const contenitore = document.createElement('div')
 			contenitore.innerHTML = file.FileName + "." + file.FileExtension
 
+			// Aggiungi una barra colorata per ogni colore estratto
 			file.Colors.forEach( c => {
 				const col = document.createElement('div')
 				col.style.height = "20px"
@@ -56,7 +48,6 @@
 			})
 			document.body.appendChild(contenitore)
 		})
-
 	</script>
 </body>
 </html>
