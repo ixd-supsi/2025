@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # === CONFIGURAZIONE ===
-SRC_DIR="./images"             # Directory di input
-OUT_FILE="atlas.jpg"           # Immagine atlas di output
-MANIFEST="atlas.json"          # Manifesto JSON di output
-TILE_COLS=50                   # Colonne nell'atlas
-TILE_ROWS=0                    # Righe calcolate automaticamente se 0
-TILE_SIZE=64                   # Dimensione di ogni tile quadrato
-UPDATE_EVERY=100               # Aggiorna il progresso ogni N immagini
+TILE_SIZE=16                       # Dimensione di ogni tile quadrato
+SRC_DIR="./images"                 # Directory di input
+TILE_COLS=128                      # Colonne nell'atlas
+TILE_ROWS=0                        # Righe calcolate automaticamente se 0
+UPDATE_EVERY=100                   # Aggiorna il progresso ogni N immagini
+OUT_FILE="atlas_${TILE_SIZE}.jpg"  # Immagine atlas di output
+MANIFEST="atlas_${TILE_SIZE}.json" # Manifesto JSON di output
+
 
 # Controlla se ImageMagick è installato
 if ! command -v magick &> /dev/null; then
@@ -51,26 +52,24 @@ while IFS= read -r IMG; do
     # Ottieni le dimensioni originali
     read ORIG_WIDTH ORIG_HEIGHT <<< $(magick identify -format "%w %h" "$IMG")
 
-    # Calcola il fattore di scala per adattarsi a TILE_SIZE mantenendo le proporzioni
+    # Calcola le dimensioni scalate mantenendo le proporzioni
     if [ "$ORIG_WIDTH" -gt "$ORIG_HEIGHT" ]; then
-        SCALE_FACTOR=$(echo "scale=2; $TILE_SIZE / $ORIG_WIDTH" | bc)
+        SCALED_WIDTH=$TILE_SIZE
+        SCALED_HEIGHT=$(( (ORIG_HEIGHT * TILE_SIZE + ORIG_WIDTH/2) / ORIG_WIDTH ))
     else
-        SCALE_FACTOR=$(echo "scale=2; $TILE_SIZE / $ORIG_HEIGHT" | bc)
+        SCALED_HEIGHT=$TILE_SIZE
+        SCALED_WIDTH=$(( (ORIG_WIDTH * TILE_SIZE + ORIG_HEIGHT/2) / ORIG_HEIGHT ))
     fi
 
-    # Calcola le nuove dimensioni mantenendo le proporzioni
-    NEW_WIDTH=$(echo "$ORIG_WIDTH * $SCALE_FACTOR" | bc | awk '{print int($1+0.5)}')
-    NEW_HEIGHT=$(echo "$ORIG_HEIGHT * $SCALE_FACTOR" | bc | awk '{print int($1+0.5)}')
+    # Calcola gli offset per centrare l'immagine nel tile
+    X_OFFSET=$(( (TILE_SIZE - SCALED_WIDTH) / 2 ))
+    Y_OFFSET=$(( (TILE_SIZE - SCALED_HEIGHT) / 2 ))
 
-    # Ridimensiona l'immagine mantenendo le proporzioni
-    if ! magick convert "$IMG" -resize "${NEW_WIDTH}x${NEW_HEIGHT}" -background black -gravity center -extent "${TILE_SIZE}x${TILE_SIZE}" "$OUT_IMG" 2>/dev/null; then
+    # Ridimensiona l'immagine mantenendo le proporzioni e centrandola in un quadrato 64x64
+    if ! magick convert "$IMG" -resize "${SCALED_WIDTH}x${SCALED_HEIGHT}" -gravity center -extent "${TILE_SIZE}x${TILE_SIZE}" "$OUT_IMG" 2>/dev/null; then
         echo "Attenzione: Impossibile ridimensionare $IMG, salto..."
         continue
     fi
-
-    # Calcola l'offset per centrare l'immagine
-    X_OFFSET=$(( (TILE_SIZE - NEW_WIDTH) / 2 ))
-    Y_OFFSET=$(( (TILE_SIZE - NEW_HEIGHT) / 2 ))
 
     # Calcola la posizione del tile
     ROW=$((i / TILE_COLS))
@@ -78,9 +77,9 @@ while IFS= read -r IMG; do
     X=$((COL * TILE_SIZE + X_OFFSET))
     Y=$((ROW * TILE_SIZE + Y_OFFSET))
 
-    # Scrivi l'entry nel manifesto JSON
+    # Scrivi l'entry nel manifesto JSON con le dimensioni effettive scalate
     printf '  {\n    "filename": "%s",\n    "x": %d,\n    "y": %d,\n    "width": %d,\n    "height": %d\n  }' \
-        "$BASENAME" "$X" "$Y" "$TILE_SIZE" "$TILE_SIZE" >> "$MANIFEST"
+        "$BASENAME" "$X" "$Y" "$SCALED_WIDTH" "$SCALED_HEIGHT" >> "$MANIFEST"
 
     i=$((i + 1))
     if [ "$i" -lt "$TOTAL_IMAGES" ]; then
