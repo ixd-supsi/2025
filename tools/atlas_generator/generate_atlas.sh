@@ -3,7 +3,7 @@
 # === CONFIGURAZIONE ===
 TILE_SIZE=16                       # Dimensione di ogni tile quadrato
 SRC_DIR="./images"                 # Directory di input
-TILE_COLS=128                      # Colonne nell'atlas
+TILE_COLS=64                       # Colonne nell'atlas
 TILE_ROWS=0                        # Righe calcolate automaticamente se 0
 UPDATE_EVERY=100                   # Aggiorna il progresso ogni N immagini
 OUT_FILE="atlas_${TILE_SIZE}.jpg"  # Immagine atlas di output
@@ -66,7 +66,7 @@ while IFS= read -r IMG; do
     Y_OFFSET=$(( (TILE_SIZE - SCALED_HEIGHT) / 2 ))
 
     # Ridimensiona l'immagine mantenendo le proporzioni e centrandola in un quadrato 64x64
-    if ! magick convert "$IMG" -resize "${SCALED_WIDTH}x${SCALED_HEIGHT}" -gravity center -extent "${TILE_SIZE}x${TILE_SIZE}" "$OUT_IMG" 2>/dev/null; then
+    if ! magick convert "$IMG" -resize "${SCALED_WIDTH}x${SCALED_HEIGHT}" -background black -gravity center -extent "${TILE_SIZE}x${TILE_SIZE}" "$OUT_IMG" 2>/dev/null; then
         echo "Attenzione: Impossibile ridimensionare $IMG, salto..."
         continue
     fi
