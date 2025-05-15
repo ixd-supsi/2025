@@ -14,11 +14,15 @@ function windowResized() {
 }
 
 function draw() {
-
+	// Dimensione piastrelline
 	const w = 64
 	const h = 64
+
+	// Numero di piastrelline per riga e per colonna
 	const numH = Math.floor(atlas.width / w)
 	const numV = Math.floor(atlas.height / h)
+
+	// Spaziatura tra le piastrelline
 	const interColonna = 10
 	const totalWidth = numH * (w + interColonna) - interColonna
 	const totalHeight = numV * (h + interColonna) - interColonna
