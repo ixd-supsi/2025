@@ -2,11 +2,8 @@ let atlas
 let data
 let immagini = []
 
-// Parametri di zoom e spostamento
-let dragX = 0
-let dragY = 0
-let zoom = 1
-let dzoom = zoom
+
+const ATLAS_CELL_SIZE = 64
 
 function preload() {
 	atlas = loadImage('atlas_64.jpg')
@@ -25,7 +22,8 @@ function setup() {
 		const v1 = item.y / atlas.height
 		const u2 = (item.x + w) / atlas.width
 		const v2 = (item.y + h) / atlas.height
-		immagini.push(new Immagine(item.FileName, w, h, u1, v1, u2, v2))
+		// l'immagine è normalizzata: dimensione 1px
+		immagini.push(new Immagine(item.FileName, w/ATLAS_CELL_SIZE, h/ATLAS_CELL_SIZE, u1, v1, u2, v2))
 	})
 
 	ordina('box')
@@ -34,8 +32,8 @@ function setup() {
 
 function mouseWheel(event) {
 
-    dzoom += event.deltaY * 0.01
-    dzoom = Math.min(Math.max(0.05, dzoom), 10)
+    // dzoom += event.deltaY * 0.01
+    // dzoom = Math.min(Math.max(0.05, dzoom), 10)
 
 }
 
@@ -46,6 +44,8 @@ function keyPressed() {
 		ordina('random')
 	} else if (key == '3') {
 		ordina('box')
+	} else if (key == '4') {
+		ordina('cilindro')
 	}
 }
 
@@ -54,10 +54,10 @@ function windowResized() {
 }
 
 function ordina(modo) {
-	const cella = 64 + 4
 
 	if (modo == 'griglia') {
 
+		const cella = 1
 		const cols = Math.ceil(Math.sqrt(immagini.length))
 		const offs = - cols * cella / 2
 
@@ -67,55 +67,96 @@ function ordina(modo) {
 			const x = col * cella + offs
 			const y = row * cella + offs
 			const z = 0
-			immagine.dx = x
-			immagine.dy = y
-			immagine.dz = z
-			immagine.dangolo = 0
+			immagine.dpos.x = x
+			immagine.dpos.y = y
+			immagine.dpos.z = z
+			immagine.drot.x = 0
+			immagine.drot.y = 0
+			immagine.drot.z = 0
 		})
 	} else if (modo == 'random') {
 
-		const cols = Math.ceil(Math.sqrt(immagini.length))
-		const max = cols * cella / 2
+		const TAU = Math.PI * 2
 
 		immagini.forEach((immagine, i) => {
-			const x = Math.random() * max * 2 - max
-			const y = Math.random() * max * 2 - max
-			const z = Math.random() * max * 2 - max
+			const r = Math.pow(Math.random(), 0.5) * 30
+			const theta = Math.random() * TAU
+			const phi = Math.random() * TAU
+			const x = r * cos(theta) * sin(phi)
+			const y = r * sin(theta) * sin(phi)
+			const z = r * cos(phi)
 
-			immagine.dangolo = Math.random() * 2 * Math.PI
-			immagine.dx = x
-			immagine.dy = y
-			immagine.dz = z
+			immagine.drot.x = Math.random() * TAU
+			immagine.drot.y = Math.random() * TAU
+			immagine.drot.z = Math.random() * TAU
+			immagine.dpos.x = x
+			immagine.dpos.y = y
+			immagine.dpos.z = z
 
 		})
 	} else if (modo == 'box') {
-		const c = cella * 3
+		const cella = 1.5
 		const cols = Math.ceil(Math.cbrt(immagini.length))
-		const offs = - cols * c / 2
+		const offs = - (cols-1) * cella / 2
 
 		immagini.forEach((immagine, i) => {
-			const x = (i % cols % cols) * c + offs
-			const y = Math.floor(i / cols % cols) * c + offs
-			const z = Math.floor(i / cols / cols) * c + offs
-			immagine.dangolo = 0
-			immagine.dx = x
-			immagine.dy = y
-			immagine.dz = z
+			const x = (i % cols % cols) * cella + offs
+			const y = Math.floor(i / cols % cols) * cella + offs
+			const z = Math.floor(i / cols / cols) * cella + offs
+			immagine.drot.x = 0
+			immagine.drot.y = 0
+			immagine.drot.z = 0
+			immagine.dpos.x = x
+			immagine.dpos.y = y
+			immagine.dpos.z = z
+		})
+	} else if (modo == 'cilindro') {
+
+		const cella = 1.25
+		const raggio = Math.ceil(Math.cbrt(immagini.length))
+		const cols = raggio * TAU
+		const numRows = Math.ceil(immagini.length / cols)
+		const offs = - (numRows - 1) / 2
+
+
+
+		immagini.forEach((immagine, i) => {
+			const row = Math.floor(i / cols)
+			const rotY = Math.floor(i % cols) / cols * TAU
+			const x = raggio * sin(rotY) * cella
+			const y = (row + offs) * cella
+			const z = raggio * cos(rotY) * cella
+			immagine.drot.x = 0
+			immagine.drot.y = rotY
+			immagine.drot.z = 0
+			immagine.dpos.x = x
+			immagine.dpos.y = y
+			immagine.dpos.z = z
 		})
 	}
 }
 
 function draw() {
 
-	zoom += (dzoom - zoom) * 0.1
+	// zoom += (dzoom - zoom) * 0.1
 
 	background(0)
 
+	const distanza = map(mouseY, 0, height, 10, 100)
+	const rotazione = map(mouseX, 0, width, -PI, PI)
 
-	const rot = map(mouseX, 0, width, -PI * 0.3, PI * 0.3)
-	rotateY(rot)
 
-	scale(zoom)
+
+	const pos = { x: distanza * cos(rotazione), y: 0, z: distanza * sin(rotazione) }
+	const eye = { x: 0, y: 0, z: 0 }
+	const up = { x: 0, y: 1, z: 0 }
+	camera(pos.x, pos.y, pos.z, eye.x, eye.y, eye.z, up.x, up.y, up.z)
+
+	const fovy = 2 * atan(height / 2 / 800)
+	const aspect = width / height
+	const near = 0.01
+	const far = 1000
+	perspective(fovy, aspect, near, far)
 
 	beginShape(QUADS)
 
@@ -123,13 +164,18 @@ function draw() {
 	textureMode(NORMAL)
 	texture(atlas)
 
-	const damp = 0.05
+	const damp = 0.1
 
 	immagini.forEach(immagine => {
-		immagine.angolo += (immagine.dangolo - immagine.angolo) * damp
-		immagine.px += (immagine.dx - immagine.px) * damp
-		immagine.py += (immagine.dy - immagine.py) * damp
-		immagine.pz += (immagine.dz - immagine.pz) * damp
+		immagine.rot.x += (immagine.drot.x - immagine.rot.x) * damp
+		immagine.rot.y += (immagine.drot.y - immagine.rot.y) * damp
+		immagine.rot.z += (immagine.drot.z - immagine.rot.z) * damp
+		immagine.pos.x += (immagine.dpos.x - immagine.pos.x) * damp
+		immagine.pos.y += (immagine.dpos.y - immagine.pos.y) * damp
+		immagine.pos.z += (immagine.dpos.z - immagine.pos.z) * damp
+		if (mouseIsPressed) {
+			immagine.lookAt(pos.x, pos.y, pos.z)
+		}
 		immagine.emettiVerticiRuotati()
 	})
 
@@ -169,45 +215,86 @@ class Immagine {
 		this.u2 = u2
 		this.v2 = v2
 
-		// posizione
-		this.angolo = 0
-		this.dangolo = 0
-		this.px = 0
-		this.py = 0
-		this.pz = 0
-		this.dx = 0
-		this.dy = 0
-		this.dz = 0
+		// posizione e rotazione
+		this.pos = { x: 0, y: 0, z: 0 }
+		this.dpos = { x: 0, y: 0, z: 0 }
+		this.rot = { x: 0, y: 0, z: 0 }
+		this.drot = { x: 0, y: 0, z: 0 }
 	}
-	emettiVertici(x = this.px, y = this.py, z = this.pz) {
-		vertex(x - this.w2, y - this.h2, z, this.u1, this.v1)
-		vertex(x + this.w2, y - this.h2, z, this.u2, this.v1)
-		vertex(x + this.w2, y + this.h2, z, this.u2, this.v2)
-		vertex(x - this.w2, y + this.h2, z, this.u1, this.v2)
+	emettiVertici() {
+		vertex(this.pos.x - this.w2, this.pos.y - this.h2, this.pos.z, this.u1, this.v1)
+		vertex(this.pos.x + this.w2, this.pos.y - this.h2, this.pos.z, this.u2, this.v1)
+		vertex(this.pos.x + this.w2, this.pos.y + this.h2, this.pos.z, this.u2, this.v2)
+		vertex(this.pos.x - this.w2, this.pos.y + this.h2, this.pos.z, this.u1, this.v2)
 	}
-	emettiVerticiRuotati(x = this.px, y = this.py, z = this.pz, angolo = this.angolo) {
-		const c = Math.cos(angolo)
-		const s = Math.sin(angolo)
 
-		// Angolo superiore sinistro
-		const x1 = x + (-this.w2 * c + this.h2 * s)
-		const y1 = y + (-this.w2 * s - this.h2 * c)
+	// Matrice di rotazione combinata (ordine: Z, Y, X)
+	rotX(x, y, z){
+		const cx = Math.cos(this.rot.x)
+		const sx = Math.sin(this.rot.x)
+		const y1 = y * cx - z * sx
+		const z1 = y * sx + z * cx
+		return { x, y: y1, z: z1 }
+	}
 
-		// Angolo superiore destro
-		const x2 = x + (this.w2 * c + this.h2 * s)
-		const y2 = y + (this.w2 * s - this.h2 * c)
+	rotY(x, y, z){
+		const cy = Math.cos(this.rot.y)
+		const sy = Math.sin(this.rot.y)
+		const x1 = x * cy + z * sy
+		const z1 = -x * sy + z * cy
+		return { x: x1, y, z: z1 }
+	}
 
-		// Angolo inferiore destro
-		const x3 = x + (this.w2 * c - this.h2 * s)
-		const y3 = y + (this.w2 * s + this.h2 * c)
+	rotZ(x, y, z){
+		const cz = Math.cos(this.rot.z)
+		const sz = Math.sin(this.rot.z)
+		const x1 = x * cz - y * sz
+		const y1 = x * sz + y * cz
+		return { x: x1, y: y1, z }
+	}
 
-		// Angolo inferiore sinistro
-		const x4 = x + (-this.w2 * c - this.h2 * s)
-		const y4 = y + (-this.w2 * s + this.h2 * c)
+	lookAt(x, y, z) {
+		const dx = x - this.pos.x
+		const dy = y - this.pos.y
+		const dz = z - this.pos.z
 
-		vertex(x1, y1, z, this.u1, this.v1)
-		vertex(x2, y2, z, this.u2, this.v1)
-		vertex(x3, y3, z, this.u2, this.v2)
-		vertex(x4, y4, z, this.u1, this.v2)
+		// Calculate rotation around Y axis (horizontal)
+		this.drot.y = Math.atan2(dx, dz)
+
+		// Calculate rotation around X axis (vertical)
+		const dist = Math.sqrt(dx * dx + dz * dz)
+		this.drot.x = -Math.atan2(dy, dist)
+
+		// No rotation around Z axis
+		this.drot.z = 0
+	}
+
+	emettiVerticiRuotati() {
+
+		// Vertici originali relativi al centro
+		const vertici = [
+			{ x: -this.w2, y: -this.h2, z: 0 },
+			{ x: this.w2, y: -this.h2, z: 0 },
+			{ x: this.w2, y: this.h2, z: 0 },
+			{ x: -this.w2, y: this.h2, z: 0 }
+		]
+
+		// Applica le rotazioni e trasla
+		const ruotati = vertici.map(v => {
+			let r = this.rotZ(v.x, v.y, v.z)
+			r = this.rotY(r.x, r.y, r.z)
+			r = this.rotX(r.x, r.y, r.z)
+			return {
+				x: r.x + this.pos.x,
+				y: r.y + this.pos.y,
+				z: r.z + this.pos.z
+			}
+		})
+
+		// Emetti i vertici ruotati
+		vertex(ruotati[0].x, ruotati[0].y, ruotati[0].z, this.u1, this.v1)
+		vertex(ruotati[1].x, ruotati[1].y, ruotati[1].z, this.u2, this.v1)
+		vertex(ruotati[2].x, ruotati[2].y, ruotati[2].z, this.u2, this.v2)
+		vertex(ruotati[3].x, ruotati[3].y, ruotati[3].z, this.u1, this.v2)
 	}
 }
