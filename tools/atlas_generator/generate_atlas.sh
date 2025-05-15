@@ -116,7 +116,7 @@ fi
 
 # Crea l'atlas con controllo errori e sfondo nero
 if ! magick montage @$TMP_LIST -tile "${TILE_COLS}x${TILE_ROWS}" -geometry +0+0 -background black "$OUT_FILE"; then
-    echo "Errore: Impossibile creare l'immagine atlas"
+    echo "Errore: Impossibile creare l’immagine atlas"
     exit 1
 fi
 
