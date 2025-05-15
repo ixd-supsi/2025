@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # === CONFIGURAZIONE ===
-TILE_SIZE=16                       # Dimensione di ogni tile quadrato
+TILE_SIZE=256                       # Dimensione di ogni tile quadrato
 SRC_DIR="./images"                 # Directory di input
-TILE_COLS=64                       # Colonne nell'atlas
+TILE_COLS=128                       # Colonne nell'atlas
 TILE_ROWS=0                        # Righe calcolate automaticamente se 0
 UPDATE_EVERY=100                   # Aggiorna il progresso ogni N immagini
 OUT_FILE="atlas_${TILE_SIZE}.jpg"  # Immagine atlas di output
