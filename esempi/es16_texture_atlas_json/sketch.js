@@ -24,7 +24,7 @@ function setup() {
 		const v1 = item.y / atlas.height
 		const u2 = (item.x + w) / atlas.width
 		const v2 = (item.y + h) / atlas.height
-		immagini.push(new Immagine(item.filename, w, h, u1, v1, u2, v2))
+		immagini.push(new Immagine(item.FileName, w, h, u1, v1, u2, v2))
 	})
 
 	document.body.style.cursor = 'grab'
@@ -75,7 +75,7 @@ function draw() {
 	const rows = Math.ceil(immagini.length / cols)
 
 	// Dimensione delle celle (un po' più grande della larghezza e altezza delle immagini)
-	const cella = 80
+	const cella = 64 + 8
 
 	const offsX = - cols * cella / 2
 	const offsY = - rows * cella / 2
@@ -93,7 +93,7 @@ function draw() {
 
 	if (cellX >= 0 && cellX < cols && cellY >= 0 && cellY < rows && cellIndex < immagini.length) {
 		const immagine = immagini[cellIndex]
-		el.innerHTML = immagine.filename
+		el.innerHTML = immagine.nome
 		el.style.left = mouseX + 'px'
 		el.style.top = mouseY + 'px'
 		el.style.display = 'block'
@@ -143,7 +143,9 @@ function draw() {
 
 class Immagine {
 	constructor(filename, w, h, u1, v1, u2, v2) {
-		this.filename = filename
+		const tokens = filename.split('_')
+		tokens.pop()
+		this.nome = tokens.join(' ')
 		this.w = w
 		this.w2 = w / 2
 		this.h = h
