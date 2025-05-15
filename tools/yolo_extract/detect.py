@@ -69,7 +69,7 @@ def detect_objects(image_path, save_crops=False, crops_dir=None):
 			crop_filename = f"{file_path.stem}_{idx}.jpg"
 			crop_path = crops_dir / crop_filename
 			try:
-				if crop_detection(image_path, detection['bbox'], str(crop_path)):
+				if crop_detection(image_path, detection['box'], str(crop_path)):
 					crops.append(crop_filename)
 			except Exception as e:
 				print(f"Errore nel ritagliare il rilevamento {idx} da {image_path}: {str(e)}")
