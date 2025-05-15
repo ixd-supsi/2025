@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Esempio 15: 3d benchmark p5js</title>
+	<style>
+		body {
+			background-color: #000;
+			margin: 0;
+			padding: 0;
+		}
+		canvas {
+			display: block;
+		}
+		main {
+			z-index: 1;
+		}
+		#info {
+			position: absolute;
+			top: 0;
+			left: 0;
+			color: white;
+			background-color: rgba(0,0,0,0.8);
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 1em;
+			padding: 0.7em;
+			border-radius: 10px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="info"></div>
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.min.js"></script>
+	<script src="sketch.js"></script>
+</body>
+</html>
