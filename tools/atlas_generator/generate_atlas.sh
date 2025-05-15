@@ -78,8 +78,10 @@ while IFS= read -r IMG; do
     Y=$((ROW * TILE_SIZE + Y_OFFSET))
 
     # Scrivi l'entry nel manifesto JSON con le dimensioni effettive scalate
-    printf '  {\n    "filename": "%s",\n    "x": %d,\n    "y": %d,\n    "width": %d,\n    "height": %d\n  }' \
-        "$BASENAME" "$X" "$Y" "$SCALED_WIDTH" "$SCALED_HEIGHT" >> "$MANIFEST"
+    BASENAME_NO_EXT="${BASENAME%.*}"
+    EXTENSION=".${BASENAME##*.}"
+    printf '  {\n    "FileName": "%s",\n    "FileExtension": "%s",\n    "x": %d,\n    "y": %d,\n    "width": %d,\n    "height": %d\n  }' \
+        "$BASENAME_NO_EXT" "$EXTENSION" "$X" "$Y" "$SCALED_WIDTH" "$SCALED_HEIGHT" >> "$MANIFEST"
 
     i=$((i + 1))
     if [ "$i" -lt "$TOTAL_IMAGES" ]; then
