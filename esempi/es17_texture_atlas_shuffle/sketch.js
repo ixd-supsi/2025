@@ -41,7 +41,7 @@ function keyPressed() {
 	if (key == '1') {
 		ordina('griglia')
 	} else if (key == '2') {
-		ordina('random')
+		ordina('palla')
 	} else if (key == '3') {
 		ordina('box')
 	} else if (key == '4') {
@@ -74,7 +74,7 @@ function ordina(modo) {
 			immagine.drot.y = 0
 			immagine.drot.z = 0
 		})
-	} else if (modo == 'random') {
+	} else if (modo == 'palla') {
 
 		const TAU = Math.PI * 2
 
@@ -92,7 +92,6 @@ function ordina(modo) {
 			immagine.dpos.x = x
 			immagine.dpos.y = y
 			immagine.dpos.z = z
-
 		})
 	} else if (modo == 'box') {
 		const cella = 1.5
@@ -111,14 +110,11 @@ function ordina(modo) {
 			immagine.dpos.z = z
 		})
 	} else if (modo == 'cilindro') {
-
 		const cella = 1.25
 		const raggio = Math.ceil(Math.cbrt(immagini.length))
 		const cols = raggio * TAU
 		const numRows = Math.ceil(immagini.length / cols)
 		const offs = - (numRows - 1) / 2
-
-
 
 		immagini.forEach((immagine, i) => {
 			const row = Math.floor(i / cols)
@@ -146,11 +142,10 @@ function draw() {
 	const rotazione = map(mouseX, 0, width, -PI, PI)
 
 
-
-	const pos = { x: distanza * cos(rotazione), y: 0, z: distanza * sin(rotazione) }
+	const cam = { x: distanza * cos(rotazione), y: 0, z: distanza * sin(rotazione) }
 	const eye = { x: 0, y: 0, z: 0 }
 	const up = { x: 0, y: 1, z: 0 }
-	camera(pos.x, pos.y, pos.z, eye.x, eye.y, eye.z, up.x, up.y, up.z)
+	camera(cam.x, cam.y, cam.z, eye.x, eye.y, eye.z, up.x, up.y, up.z)
 
 	const fovy = 2 * atan(height / 2 / 800)
 	const aspect = width / height
@@ -164,17 +159,18 @@ function draw() {
 	textureMode(NORMAL)
 	texture(atlas)
 
-	const damp = 0.1
+	const damp = 0.05
 
 	immagini.forEach(immagine => {
 		immagine.rot.x += (immagine.drot.x - immagine.rot.x) * damp
 		immagine.rot.y += (immagine.drot.y - immagine.rot.y) * damp
 		immagine.rot.z += (immagine.drot.z - immagine.rot.z) * damp
+
 		immagine.pos.x += (immagine.dpos.x - immagine.pos.x) * damp
 		immagine.pos.y += (immagine.dpos.y - immagine.pos.y) * damp
 		immagine.pos.z += (immagine.dpos.z - immagine.pos.z) * damp
 		if (mouseIsPressed) {
-			immagine.lookAt(pos.x, pos.y, pos.z)
+			immagine.lookAt(cam.x, cam.y, cam.z)
 		}
 		immagine.emettiVerticiRuotati()
 	})
@@ -221,12 +217,7 @@ class Immagine {
 		this.rot = { x: 0, y: 0, z: 0 }
 		this.drot = { x: 0, y: 0, z: 0 }
 	}
-	emettiVertici() {
-		vertex(this.pos.x - this.w2, this.pos.y - this.h2, this.pos.z, this.u1, this.v1)
-		vertex(this.pos.x + this.w2, this.pos.y - this.h2, this.pos.z, this.u2, this.v1)
-		vertex(this.pos.x + this.w2, this.pos.y + this.h2, this.pos.z, this.u2, this.v2)
-		vertex(this.pos.x - this.w2, this.pos.y + this.h2, this.pos.z, this.u1, this.v2)
-	}
+
 
 	// Matrice di rotazione combinata (ordine: Z, Y, X)
 	rotX(x, y, z){
@@ -296,5 +287,12 @@ class Immagine {
 		vertex(ruotati[1].x, ruotati[1].y, ruotati[1].z, this.u2, this.v1)
 		vertex(ruotati[2].x, ruotati[2].y, ruotati[2].z, this.u2, this.v2)
 		vertex(ruotati[3].x, ruotati[3].y, ruotati[3].z, this.u1, this.v2)
+	}
+
+	emettiVertici() {
+		vertex(this.pos.x - this.w2, this.pos.y - this.h2, this.pos.z, this.u1, this.v1)
+		vertex(this.pos.x + this.w2, this.pos.y - this.h2, this.pos.z, this.u2, this.v1)
+		vertex(this.pos.x + this.w2, this.pos.y + this.h2, this.pos.z, this.u2, this.v2)
+		vertex(this.pos.x - this.w2, this.pos.y + this.h2, this.pos.z, this.u1, this.v2)
 	}
 }
